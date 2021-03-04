@@ -1,0 +1,15 @@
+Team_Name: Australia
+Captain_Id: 3
+wicketKeeper_Id: 6
+Player_Id   Player_Name             Player_Category
+1           David Warner            Batsman
+2           Steve Smith             Batsman
+3           Aaron Finch             Batsman
+4           Glenn Maxwell           Batsman
+5           Marcus Herris           Batsman
+6           Alex Carey              Batsman
+7           Pat Cummins             Bowler
+8           Josh Hazlewood          Bowler
+9           Mitchell Starc          Bowler
+10          Adam Zampa              Bowler
+11          Kane Richardson         Bowler

@@ -1,0 +1,15 @@
+Team_Name: India
+Captain_Id: 2
+wicketKeeper_Id: 5
+Player_Id   Player_Name             Player_Category
+1           Virat Kohli             Batsman
+2           Rohit Sharma            Batsman
+3           KL Rahul                Batsman
+4           Shikhar Dhawan          Batsman
+5           Rishabh Pant            Batsman
+6           Ajinkya Rahane          Batsman
+7           Jasprit Bumrah          Bowler
+8           Cheteshwar Pujara       Bowler
+9           Bhuvneshwar Kumar       Bowler
+10          Ravichandran Ashwin     Bowler
+11          Mohammad Shami          Bowler
