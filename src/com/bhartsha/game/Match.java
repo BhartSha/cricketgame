@@ -23,24 +23,26 @@ public class Match {
         firstTeam = teamA.returnTeamObject();
         secondTeam = teamB.returnTeamObject();
 
-        firstTeam.showTeamDetail();
-        secondTeam.showTeamDetail();
+        //firstTeam.showTeamDetail();
+        //secondTeam.showTeamDetail();
     }
     public void start(){
         toss = new Toss(firstTeam.getTeamName() , firstTeam.getCaptain().getPlayerName() , secondTeam.getTeamName() , secondTeam.getCaptain().getPlayerName());
         toss.flipCoin();
 
         if(toss.isFirstTeamBattingFirst()){
-            Inning1 = new PlayGame(firstTeam , secondTeam.getTeamName() ,numberOfOver);
+            Inning1 = new PlayGame(firstTeam , secondTeam ,numberOfOver);
             Inning1.startInning();
+            //firstTeam.showTeamDetail();
 
-            Inning2 = new PlayGame(secondTeam , firstTeam.getTeamName() ,numberOfOver,Inning1.getFinalScore());
+            Inning2 = new PlayGame(secondTeam , firstTeam ,numberOfOver , Inning1.getFinalScore());
         }
         else{
-            Inning1 = new PlayGame(secondTeam , firstTeam.getTeamName() ,numberOfOver);
+            Inning1 = new PlayGame(secondTeam , firstTeam , numberOfOver);
             Inning1.startInning();
+            //secondTeam.showTeamDetail();
 
-            Inning2 = new PlayGame(firstTeam , secondTeam.getTeamName() ,numberOfOver,Inning1.getFinalScore());
+            Inning2 = new PlayGame(firstTeam , secondTeam , numberOfOver , Inning1.getFinalScore());
         }
         Inning2.startInning();
 

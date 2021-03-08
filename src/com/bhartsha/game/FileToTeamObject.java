@@ -52,6 +52,8 @@ public class FileToTeamObject {
             playerName = lineData[1]+" "+lineData[2];
             playerCategory = lineData[3];
             Player obj = new Player(playerId,playerName,playerCategory);
+            obj.getAsBatsman().setStrikeRate(Double.parseDouble(lineData[4]));
+            obj.getAsBowler().setStrikeRate(Double.parseDouble(lineData[5]));
             if(playerId == captainId){
                 captainObj = obj;
             }

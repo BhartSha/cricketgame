@@ -6,63 +6,81 @@ import java.util.ArrayList;
 
 @Data
 public class PlayGame {
-    private int numberOfOver , targetScore , currentScore , currentWicket , finalScore , finalWicket;
-    private Team team;
+    private int numberOfOver , targetScore , currentScore , currentWicket , finalScore , finalWicket,maxOverPerBowler;
+    private Team battingTeam , bowlingTeam;
+    private NextBatsman nextbatsman;
+    private NextBowler nextBowler;
     private ArrayList<Player> players;
-    private char[][] ballResult;
+    private Over[] overs;
     Boolean chasing = false;
-    private String oppositionTeam;
-    public PlayGame(Team team , String oppositionTeam ,int numberOfOver , int targetScore){
-        this.team = team;
+    public PlayGame(Team battingTeam , Team bowlingTeam ,int numberOfOver , int targetScore){
+        this.battingTeam = battingTeam;
+        this.bowlingTeam = bowlingTeam;
         this.numberOfOver = numberOfOver;
         this.targetScore = targetScore;
-        this.players = this.team.getPlayers();
-        this.oppositionTeam = oppositionTeam;
-        ballResult = new char[numberOfOver][6];
+        this.nextbatsman = new NextBatsman(battingTeam.getPlayers());
+        this.nextBowler = new NextBowler(bowlingTeam.getPlayers());
+        overs = new Over[numberOfOver];
         chasing = true;
     }
-    public PlayGame(Team team , String oppositionTeam , int numberOfOver){
-        this.team = team;
+    public PlayGame(Team battingTeam , Team bowlingTeam ,int numberOfOver){
+        this.battingTeam = battingTeam;
+        this.bowlingTeam = bowlingTeam;
         this.numberOfOver = numberOfOver;
-        this.players = this.team.getPlayers();
-        this.oppositionTeam = oppositionTeam;
-        ballResult = new char[numberOfOver][6];
+        this.nextbatsman = new NextBatsman(battingTeam.getPlayers());
+        this.nextBowler = new NextBowler(bowlingTeam.getPlayers());
+        overs = new Over[numberOfOver];
     }
 
     public void startInning(){
-        int index=2,run;
-        Player striker = players.get(0),temp = null;
-        Player nonStriker = players.get(1);
-        striker.setBattingStatus(true);
-        nonStriker.setBattingStatus(true);
+        maxOverPerBowler = (int) Math.ceil((float)numberOfOver/6);
+        int run,id;
+        Player bowler=null;
+        char scoreOnCurrentBall;
+        Player striker = nextbatsman.getAccordingToStrikeRate(),temp;
+        striker.getAsBatsman().setBattingStatus(true);
+
+        Player nonStriker = nextbatsman.getAccordingToStrikeRate();
+        nonStriker.getAsBatsman().setBattingStatus(true);
+
         for (int i = 0; i <numberOfOver ; i++) {
-            for (int j = 0; j <6 ; j++) {
+            Over currentOver = new Over();
+            id = i==0?-1:overs[i-1].getBowler().getId();
+            bowler = nextBowler.getAccordingToStrikeRate(id,maxOverPerBowler);
+            bowler.getAsBowler().setBowlingStatus(true);
+            bowler.getAsBowler().setOvers(bowler.getAsBowler().getOvers()+1);
+            currentOver.setBowler(bowler);
+            for (int j = 0; j<6 ; j++) {
                 if(currentWicket == 10){
                     showScore();
                     if(chasing)
                         showResult();
                     return;
                 }
-                striker.setBalls(striker.getBalls()+1);
-                ballResult[i][j] = Utils.getRandomScore();
-                if(ballResult[i][j] == 'W'){
-                    striker.setOutStatus(true);
+                striker.getAsBatsman().setBalls(striker.getAsBatsman().getBalls()+1);
+                scoreOnCurrentBall = Utils.getRandomScore(striker.getCategory());
+                currentOver.addBall(Character.toString(scoreOnCurrentBall));
+                if(scoreOnCurrentBall == 'W'){
+                    currentOver.setWickets(currentOver.getWickets()+1);
+                    bowler.getAsBowler().setWickets(bowler.getAsBowler().getWickets()+1);
+                    striker.getAsBatsman().setOutStatus(true);
                     currentWicket++;
                     if(currentWicket!=10){
-                        striker = players.get(index);
-                        striker.setBattingStatus(true);
-                        index++;
+                        striker = nextbatsman.getAccordingToStrikeRate();
+                        striker.getAsBatsman().setBattingStatus(true);
                     }
                 }
                 else{
-                    run =  Character.getNumericValue(ballResult[i][j]);
+                    run =  Character.getNumericValue(scoreOnCurrentBall);
+                    currentOver.setTotalRuns(currentOver.getTotalRuns()+run);
+                    bowler.getAsBowler().setRuns(bowler.getAsBowler().getRuns()+run);
                     currentScore += run;
-                    striker.setRuns(striker.getRuns()+run);
+                    striker.getAsBatsman().setRuns(striker.getAsBatsman().getRuns()+run);
                     if(run == 4){
-                        striker.setFours(striker.getFours()+1);
+                        striker.getAsBatsman().setFours(striker.getAsBatsman().getFours()+1);
                     }
                     if(run == 6){
-                        striker.setSixes(striker.getSixes()+1);
+                        striker.getAsBatsman().setSixes(striker.getAsBatsman().getSixes()+1);
                     }
                     if(run%2!=0){
                         temp = striker;
@@ -76,6 +94,10 @@ public class PlayGame {
                     return;
                 }
             }
+            overs[i] = currentOver;
+            currentOver.showOverDetails();
+            if(currentOver.getTotalRuns()==0)
+                bowler.getAsBowler().setMaidens(bowler.getAsBowler().getMaidens()+1);
             temp = striker;
             striker = nonStriker;
             nonStriker = temp;
@@ -86,10 +108,17 @@ public class PlayGame {
     }
 
     public void showScore(){
-        System.out.println("Player Name   R   B   4s   6s");
-        for (Player player : players) {
-            if(player.isBattingStatus())
-                System.out.println(player.getPlayerName() + "    " + player.getRuns() +"   "+player.getBalls()+"   "+player.getFours()+"   "+player.getSixes());
+        System.out.println("Player Name  R   B   4s   6s");
+        for (Player player : battingTeam.getPlayers()) {
+            if(player.getAsBatsman().isBattingStatus()){
+                player.printBattingStats();
+            }
+        }
+        System.out.println("Player Name   Overs   B   W   M");
+        for (Player player : bowlingTeam.getPlayers()) {
+            if(player.getAsBowler().isBowlingStatus()){
+                player.printBowlingStats();
+            }
         }
         finalScore = currentScore;
         finalWicket = currentWicket;
@@ -97,9 +126,9 @@ public class PlayGame {
     }
     public void showResult(){
         if(currentScore>targetScore)
-            System.out.println("Team "+team.getTeamName()+" Win!!");
+            System.out.println("Team "+battingTeam.getTeamName()+" Win!!");
         else if(currentScore<targetScore)
-            System.out.println("Team "+oppositionTeam+ " Win!!");
+            System.out.println("Team "+bowlingTeam.getTeamName()+ " Win!!");
         else
             System.out.println("Match Tie");
     }

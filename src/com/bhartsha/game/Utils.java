@@ -5,10 +5,44 @@ import lombok.experimental.UtilityClass;
 import java.util.Random;
 @UtilityClass
 public class Utils {
-    private final char[] possibleScore = {'W' , '0' , '1' , '2' , '3' , '4' ,'5', '6'};
+    private final char[] possibleScore = {'0' , '1' , '2' , '3' , '4' ,'5', '6','W'};
+    private final int[] batsmanScoreFrequency={4,8,9,5,7,1,2,2};
+    private final int[] allRounderScoreFrequency={3,5,8,4,9,1,4,4};
+    private final int[] bowlerScoreFrequency={6,11,7,3,4,0,1,6};
     private final String[] coinFaces = {"head","tail"};
-    public char getRandomScore(){
-        int rnd = new Random().nextInt(possibleScore.length);
+    public int findCeil(int[] prefix , int ele ,  int l , int r){
+        int mid;
+        while(l<r){
+            mid = l+((r-l) >> 1);
+            if(ele>prefix[mid]){
+                l = mid+1;
+            }
+            else{
+                r = mid;
+            }
+        }
+        return (prefix[l]>=ele)?l:-1;
+    }
+    public int randomIndex(int[] freq , int n){
+        int[] prefix = new int[n];
+        prefix[0] = freq[0];
+        for (int i = 1; i <n ; i++) {
+            prefix[i] = prefix[i-1]+freq[i];
+        }
+        int ele =  (int)(Math.random()*prefix[n-1]+1);
+        return findCeil(prefix , ele , 0 , n-1);
+    }
+    public char getRandomScore(String category){
+        int rnd = 0;
+        if(category.equals("Batsman")){
+            rnd = randomIndex(batsmanScoreFrequency , batsmanScoreFrequency.length);
+        }
+        else if(category.equals("AllRounder")){
+            rnd = randomIndex(allRounderScoreFrequency , allRounderScoreFrequency.length);
+        }
+        else{
+            rnd = randomIndex(bowlerScoreFrequency , bowlerScoreFrequency.length);
+        }
         return possibleScore[rnd];
     }
     public String getRandomCoinFace(){
