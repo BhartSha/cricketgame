@@ -19,13 +19,12 @@ public class NextBatsman {
         return player;
     }
     public Player getSequentially(){
-        Player player=null;
         for (Player value : players) {
             if (!value.getAsBatsman().isBattingStatus()) {
-                player = value;
+                return value;
             }
         }
-        return player;
+        return null;
     }
     public Player getRandomly(){
         ArrayList<Integer> bowlersIndex = new ArrayList<>();

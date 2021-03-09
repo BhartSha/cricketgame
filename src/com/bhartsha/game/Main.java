@@ -15,5 +15,6 @@ public class Main {
         int numberOfOver = sc.nextInt();
 
         Match newMatch = new Match(teamA , teamB, numberOfOver);
+        newMatch.start();
     }
 }

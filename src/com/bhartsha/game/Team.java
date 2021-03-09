@@ -28,7 +28,7 @@ public class Team {
         System.out.println("Team_Name: "+teamName);
         System.out.println("Players----");
         for (Player player : players) {
-            System.out.println(player.getId() + "   " + player.getPlayerName() + "   " + player.getCategory()+" "+player.getAsBatsman().isBattingStatus());
+            System.out.println(player.getId() + "   " + player.getPlayerName() + "   " + player.getCategory());
         }
     }
 }

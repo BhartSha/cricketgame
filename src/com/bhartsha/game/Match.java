@@ -9,7 +9,7 @@ public class Match {
     private int numberOfOver;
     private Team firstTeam , secondTeam;
     private FileToTeamObject teamA , teamB;
-    private PlayGame Inning1 , Inning2;
+    private PlayGame firstInning , secondInning;
     private Toss toss;
     public Match(File teamA , File teamB , int numberOfOver){
         this.teamA = new FileToTeamObject(teamA);
@@ -17,34 +17,36 @@ public class Match {
         this.numberOfOver = numberOfOver;
 
         convertFileDataToTeamObject();
-        start();
     }
     public void convertFileDataToTeamObject(){
         firstTeam = teamA.returnTeamObject();
         secondTeam = teamB.returnTeamObject();
-
-        //firstTeam.showTeamDetail();
-        //secondTeam.showTeamDetail();
     }
     public void start(){
         toss = new Toss(firstTeam.getTeamName() , firstTeam.getCaptain().getPlayerName() , secondTeam.getTeamName() , secondTeam.getCaptain().getPlayerName());
         toss.flipCoin();
 
         if(toss.isFirstTeamBattingFirst()){
-            Inning1 = new PlayGame(firstTeam , secondTeam ,numberOfOver);
-            Inning1.startInning();
-            //firstTeam.showTeamDetail();
-
-            Inning2 = new PlayGame(secondTeam , firstTeam ,numberOfOver , Inning1.getFinalScore());
+            firstInning = new PlayGame(firstTeam , secondTeam ,numberOfOver);
+            firstInning.startInning();
+            secondInning = new PlayGame(secondTeam , firstTeam ,numberOfOver , firstInning.getCurrentScore());
         }
         else{
-            Inning1 = new PlayGame(secondTeam , firstTeam , numberOfOver);
-            Inning1.startInning();
-            //secondTeam.showTeamDetail();
-
-            Inning2 = new PlayGame(firstTeam , secondTeam , numberOfOver , Inning1.getFinalScore());
+            firstInning = new PlayGame(secondTeam , firstTeam , numberOfOver);
+            firstInning.startInning();
+            secondInning = new PlayGame(firstTeam , secondTeam , numberOfOver , firstInning.getCurrentScore());
         }
-        Inning2.startInning();
-
+        secondInning.startInning();
+        showResult();
+    }
+    public void showResult(){
+        firstTeam.showTeamDetail();
+        secondTeam.showTeamDetail();
+        InningResult firstInningResult = new InningResult(firstInning);
+        InningResult secondInningResult = new InningResult(secondInning);
+        firstInningResult.printInningStats();
+        System.out.println();
+        System.out.println();
+        secondInningResult.printInningStats();
     }
 }

@@ -8,6 +8,6 @@ public class Batsman {
     private boolean outStatus , battingStatus;
     private double strikeRate;
     public void showResult(String playerName){
-        System.out.println(playerName+"  "+runs+"  "+balls+"  "+fours+"  "+sixes);
+        System.out.print(playerName+"  "+runs+"  "+balls+"  "+fours+"  "+sixes);
     }
 }

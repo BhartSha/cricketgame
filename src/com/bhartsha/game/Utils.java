@@ -33,7 +33,7 @@ public class Utils {
         return findCeil(prefix , ele , 0 , n-1);
     }
     public char getRandomScore(String category){
-        int rnd = 0;
+        int rnd;
         if(category.equals("Batsman")){
             rnd = randomIndex(batsmanScoreFrequency , batsmanScoreFrequency.length);
         }

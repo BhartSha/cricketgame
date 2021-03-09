@@ -16,11 +16,9 @@ public class Player {
         asBowler = new Bowler();
     }
     public void printBattingStats(){
-        //System.out.println("Player Name   R  B  4s  6s");
         asBatsman.showResult(playerName);
     }
     public void printBowlingStats(){
-        //System.out.println("Player Name   Overs  R   W   M");
         asBowler.showResult(playerName);
     }
 }
