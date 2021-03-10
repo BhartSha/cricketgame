@@ -18,7 +18,7 @@ public class FileToTeamObject {
         List<String> list = new ArrayList<>();
         String[] data = new String[0], lineData;
         String teamName, playerName , playerCategory;
-        int playerId , captainId , wicketKeeperId;
+        int playerId , captainId , wicketKeeperId,teamId;
         Player captainObj = null, wicketKeeperObj = null;
         try {
             Scanner myReader = new Scanner(teamData);
@@ -34,19 +34,23 @@ public class FileToTeamObject {
         lineData = data[0].split(" ");
         teamName = lineData[1];
 
+        //retrieve team id
+        lineData = data[1].split(" ");
+        teamId = Integer.parseInt(lineData[1]);
+
         //creating team object
-        Team team = new Team(teamName);
+        Team team = new Team(teamName,teamId);
 
         // retrieve captain id
-        lineData = data[1].split(" ");
+        lineData = data[2].split(" ");
         captainId = Integer.parseInt(lineData[1]);
 
         //retrieve wicketKeeper id
-        lineData = data[2].split(" ");
+        lineData = data[3].split(" ");
         wicketKeeperId = Integer.parseInt(lineData[1]);
 
         //retrieve players data
-        for (int i = 4; i < data.length ; i++) {
+        for (int i = 5; i < data.length ; i++) {
             lineData = data[i].split("\\s+");
             playerId = Integer.parseInt(lineData[0]);
             playerName = lineData[1]+" "+lineData[2];

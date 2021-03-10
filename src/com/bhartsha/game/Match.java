@@ -3,6 +3,7 @@ package com.bhartsha.game;
 import lombok.Data;
 
 import java.io.File;
+import java.sql.Connection;
 
 @Data
 public class Match {
@@ -11,11 +12,12 @@ public class Match {
     private FileToTeamObject teamA , teamB;
     private PlayGame firstInning , secondInning;
     private Toss toss;
-    public Match(File teamA , File teamB , int numberOfOver){
+    private Connection connection;
+    public Match(File teamA, File teamB, int numberOfOver, Connection connection){
         this.teamA = new FileToTeamObject(teamA);
         this.teamB = new FileToTeamObject(teamB);
         this.numberOfOver = numberOfOver;
-
+        this.connection = connection;
         convertFileDataToTeamObject();
     }
     public void convertFileDataToTeamObject(){

@@ -9,9 +9,10 @@ public class Team {
     private ArrayList<Player> players;
     private Player captain , wicketKeeper;
     private String teamName;
-    private int bowlers , batsmen,allRounders;
-    public Team(String teamName){
+    private int bowlers , batsmen,allRounders,totalPlayers,teamId;
+    public Team(String teamName , int teamId){
         this.teamName = teamName;
+        this.teamId = teamId;
         players = new ArrayList<>();
     }
     public void addPlayer(Player A){
@@ -21,6 +22,7 @@ public class Team {
             bowlers++;
         else
             allRounders++;
+        totalPlayers++;
         players.add(A);
     }
 
