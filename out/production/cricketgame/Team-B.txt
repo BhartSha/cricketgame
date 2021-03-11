@@ -1,15 +1,16 @@
 Team_Name: Australia
-Captain_Id: 3
-wicketKeeper_Id: 6
+Team_Id: 2
+Captain_Id: 23
+wicketKeeper_Id: 26
 Player_Id   Player_Name             Player_Category         Batting_Strike_Rate    Bowling_Strike_Rate
-1           David Warner            Batsman                 120.24                 160.25
-2           Steve Smith             Batsman                 138.12                 120.34
-3           Aaron Finch             Batsman                 110.92                 170.34
-4           Glenn Maxwell           AllRounder              115.88                 180.55
-5           Marcus Herris           Batsman                 88.71                  150.44
-6           Alex Carey              Batsman                 113.48                 36.49
-7           James Faulkner          AllRounder              90.32                  34.88
-8           Josh Hazlewood          Bowler                  76.14                  27.44
-9           Mitchell Starc          Bowler                  74.82                  26.58
-10          Adam Zampa              Bowler                  80.98                  22.59
-11          Kane Richardson         Bowler                  60.22                  27.59
+21           David Warner            Batsman                 120.24                 160.25
+22           Steve Smith             Batsman                 138.12                 120.34
+23           Aaron Finch             Batsman                 110.92                 170.34
+24           Glenn Maxwell           AllRounder              115.88                 180.55
+25           Marcus Herris           Batsman                 88.71                  150.44
+26           Alex Carey              Batsman                 113.48                 36.49
+27           James Faulkner          AllRounder              90.32                  34.88
+28           Josh Hazlewood          Bowler                  76.14                  27.44
+29           Mitchell Starc          Bowler                  74.82                  26.58
+30          Adam Zampa              Bowler                  80.98                  22.59
+31          Kane Richardson         Bowler                  60.22                  27.59

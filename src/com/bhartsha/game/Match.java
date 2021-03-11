@@ -4,6 +4,9 @@ import lombok.Data;
 
 import java.io.File;
 import java.sql.Connection;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Calendar;
 
 @Data
 public class Match {
@@ -13,20 +16,35 @@ public class Match {
     private PlayGame firstInning , secondInning;
     private Toss toss;
     private Connection connection;
-    public Match(File teamA, File teamB, int numberOfOver, Connection connection){
+    private Database db;
+    private String location;
+    public Match(File teamA, File teamB, int numberOfOver, Connection connection , String location){
         this.teamA = new FileToTeamObject(teamA);
         this.teamB = new FileToTeamObject(teamB);
         this.numberOfOver = numberOfOver;
         this.connection = connection;
+        this.location = location;
+        db = new Database(this.connection);
         convertFileDataToTeamObject();
+    }
+    public Match(int firstTeamId , int secondTeamId , int numberOfOver , Connection connection , String location){
+        this.numberOfOver = numberOfOver;
+        this.connection = connection;
+        this.location = location;
+        db = new Database(this.connection);
+        this.firstTeam = db.getTeamObj(firstTeamId);
+        this.secondTeam = db.getTeamObj(secondTeamId);
     }
     public void convertFileDataToTeamObject(){
         firstTeam = teamA.returnTeamObject();
         secondTeam = teamB.returnTeamObject();
+        db.addTeamDetails(firstTeam);
+        db.addTeamDetails(secondTeam);
     }
     public void start(){
-        toss = new Toss(firstTeam.getTeamName() , firstTeam.getCaptain().getPlayerName() , secondTeam.getTeamName() , secondTeam.getCaptain().getPlayerName());
+        toss = new Toss(firstTeam , secondTeam);
         toss.flipCoin();
+        int toss_id = toss.addTossDetailInDatabase(connection);
 
         if(toss.isFirstTeamBattingFirst()){
             firstInning = new PlayGame(firstTeam , secondTeam ,numberOfOver);
@@ -39,6 +57,9 @@ public class Match {
             secondInning = new PlayGame(firstTeam , secondTeam , numberOfOver , firstInning.getCurrentScore());
         }
         secondInning.startInning();
+        db.updateTablesAfterInning(firstInning);
+        db.updateTablesAfterInning(secondInning);
+        db.updateMatchResultTable(firstInning , secondInning , toss_id , location);
         showResult();
     }
     public void showResult(){

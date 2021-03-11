@@ -17,7 +17,7 @@ public class FileToTeamObject {
     public Team returnTeamObject() {
         List<String> list = new ArrayList<>();
         String[] data = new String[0], lineData;
-        String teamName, playerName , playerCategory;
+        String teamName, playerCategory;
         int playerId , captainId , wicketKeeperId,teamId;
         Player captainObj = null, wicketKeeperObj = null;
         try {
@@ -53,9 +53,8 @@ public class FileToTeamObject {
         for (int i = 5; i < data.length ; i++) {
             lineData = data[i].split("\\s+");
             playerId = Integer.parseInt(lineData[0]);
-            playerName = lineData[1]+" "+lineData[2];
             playerCategory = lineData[3];
-            Player obj = new Player(playerId,playerName,playerCategory);
+            Player obj = new Player(playerId,lineData[1],lineData[2],playerCategory);
             obj.getAsBatsman().setStrikeRate(Double.parseDouble(lineData[4]));
             obj.getAsBowler().setStrikeRate(Double.parseDouble(lineData[5]));
             if(playerId == captainId){

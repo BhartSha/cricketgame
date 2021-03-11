@@ -57,6 +57,7 @@ public class PlayGame {
             currentOver.setBowler(bowler);
             flag = true;
             for (int j = 0; j<6 ; j++) {
+                bowler.getAsBowler().setBalls(bowler.getAsBowler().getBalls()+1);
                 striker.getAsBatsman().setBalls(striker.getAsBatsman().getBalls()+1);
                 scoreOnCurrentBall = Utils.getRandomScore(striker.getCategory());
                 currentOver.addBall(Character.toString(scoreOnCurrentBall));

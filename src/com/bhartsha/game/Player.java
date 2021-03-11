@@ -4,14 +4,16 @@ import lombok.Data;
 
 @Data
 public class Player {
-    private String playerName , category;
+    private String playerName , category ,firstName , lastName;
     private int id;
     private Bowler asBowler;
     private Batsman asBatsman;
-    public Player(int id , String playerName , String category){
-        this.playerName = playerName;
-        this.category = category;
+    public Player(int id ,String firstName , String lastName, String category){
         this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.category = category;
+        this.playerName = firstName+" "+lastName;
         asBatsman = new Batsman();
         asBowler = new Bowler();
     }
