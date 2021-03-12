@@ -5,15 +5,15 @@ import java.util.*;
 import java.sql.*;
 
 public class Main {
-    static final String DB_URL = "jdbc:mysql://localhost:3306/cricketdb";
-    static final String uname = "root";
-    static final String password = "Mysql5859?";
+
     public static void main(String[] args) throws SQLException {
+        ResourceBundle reader = null;
         Connection connection = null;
         try {
-            Class.forName("com.mysql.jdbc.Driver");
+            reader = ResourceBundle.getBundle("com.bhartsha.game.dbconfig");
+            Class.forName(reader.getString("db.class"));
             System.out.println("Connecting to a selected database...");
-            connection = DriverManager.getConnection(DB_URL, uname, password);
+            connection = DriverManager.getConnection(reader.getString("db.url") , reader.getString("db.username") , reader.getString("db.password"));
             System.out.println("Connected database successfully...");
             Scanner sc = new Scanner(System.in);
 
