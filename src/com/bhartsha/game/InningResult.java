@@ -2,7 +2,7 @@ package com.bhartsha.game;
 
 public class InningResult {
     private final PlayGame inning;
-    private int totalWicket , totalScore;
+    private int totalScore;
     public InningResult(PlayGame inning){
         this.inning = inning;
     }
@@ -13,9 +13,13 @@ public class InningResult {
     }
     public void printBatsmenStats(){
         System.out.println("Player Name  R   B   4s   6s");
-        for (int i = 0; i <inning.getWicketDetail().size() ; i++) {
-            inning.getWicketDetail().get(i).getBatsman().printBattingStats();
-            System.out.println("  b "+inning.getWicketDetail().get(i).getBowler().getPlayerName());
+        for (Wicket wicket : inning.getWicketDetail()) {
+            wicket.getBatsman().printBattingStats();
+            System.out.print("  b "+wicket.getBowler().getPlayerName()+" "+wicket.getWicketType().getValue()+" ");
+            if(wicket.getAssistPlayer()!= null){
+                System.out.print("by "+wicket.getAssistPlayer().getPlayerName());
+            }
+            System.out.println();
         }
         for (Player player : inning.getBattingTeam().getPlayers()) {
             if(player.getAsBatsman().isBattingStatus()&&!player.getAsBatsman().isOutStatus()){
@@ -23,6 +27,8 @@ public class InningResult {
                 System.out.println("   Not Out");
             }
         }
+        System.out.println();
+        System.out.println();
     }
     public void printBowlerStats(){
         System.out.println("Player Name   Overs   R   W   M");
@@ -31,18 +37,39 @@ public class InningResult {
                 player.printBowlingStats();
             }
         }
+        System.out.println();
+        System.out.println();
     }
     public void printFinalStats(){
         totalScore = inning.getCurrentScore();
-        totalWicket = inning.getCurrentWicket();
+        int totalWicket = inning.getCurrentWicket();
         int totalOvers = inning.getOvers().size();
-        int lastOverSize = inning.getOvers().get(totalOvers-1).getOverDetails().size();
+        int lastOverSize=0;
+        for(Ball ball : inning.getOvers().get(totalOvers-1).getOverDetails()){
+            if(ball.getTypeOfBall()==MyEnumContainer.TypeOfBall.NORMAL||ball.getTypeOfBall()==MyEnumContainer.TypeOfBall.BOUNCE){
+                lastOverSize++;
+            }
+        }
         if(lastOverSize<6)
             System.out.println("Total Overs : "+(totalOvers-1)+"."+lastOverSize);
         else
             System.out.println("Total Overs : "+totalOvers+".0");
 
-        System.out.println("Total:-   "+totalScore + " / "+totalWicket);
+        int extras=0 , wideBall=0 , noBall=0;
+        for(Over over : inning.getOvers()){
+            for(Ball ball : over.getOverDetails()){
+                if(ball.getTypeOfBall() == MyEnumContainer.TypeOfBall.NOBALL){
+                    extras++;
+                    noBall++;
+                }
+                if(ball.getTypeOfBall() == MyEnumContainer.TypeOfBall.WIDE){
+                    extras++;
+                    wideBall++;
+                }
+            }
+        }
+        System.out.println("Total:-   "+totalScore + " / "+ totalWicket);
+        System.out.println("Extras: "+ extras +"  , Wides: "+wideBall+"  , No Balls: "+noBall);
     }
     public void printInningStats(){
         printOversStats();
@@ -55,9 +82,9 @@ public class InningResult {
     }
     public void printFinalResult(){
         if(totalScore>inning.getTargetScore())
-            System.out.println("Team "+inning.getBattingTeam().getTeamName()+" Win!!");
+            System.out.println("Team "+inning.getBattingTeam().getTeamName()+" Win!!  by "+(10-inning.getCurrentWicket())+" wickets");
         else if(totalScore<inning.getTargetScore())
-            System.out.println("Team "+inning.getBowlingTeam().getTeamName()+ " Win!!");
+            System.out.println("Team "+inning.getBowlingTeam().getTeamName()+ " Win!!  by "+(inning.getTargetScore()-totalScore)+ " Runs");
         else
             System.out.println("Match Tie");
     }

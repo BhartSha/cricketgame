@@ -1,12 +1,10 @@
 package com.bhartsha.game;
 
+import com.bhartsha.game.database.*;
 import lombok.Data;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.Calendar;
+import java.util.ArrayList;
 
 @Data
 public class Match {
@@ -15,25 +13,33 @@ public class Match {
     private FileToTeamObject teamA , teamB;
     private PlayGame firstInning , secondInning;
     private Toss toss;
-    private Connection connection;
     private Database db;
+    private DBConnection dbConnection;
     private String location;
-    public Match(File teamA, File teamB, int numberOfOver, Connection connection , String location){
+    public Match(File teamA, File teamB, int numberOfOver , String location){
         this.teamA = new FileToTeamObject(teamA);
         this.teamB = new FileToTeamObject(teamB);
         this.numberOfOver = numberOfOver;
-        this.connection = connection;
         this.location = location;
-        db = new Database(this.connection);
+        dbConnection = new DBConnection();
+        db = new Database(dbConnection.getConnection());
         convertFileDataToTeamObject();
     }
-    public Match(int firstTeamId , int secondTeamId , int numberOfOver , Connection connection , String location){
+    public Match(int firstTeamId , int secondTeamId , int numberOfOver , String location){
         this.numberOfOver = numberOfOver;
-        this.connection = connection;
         this.location = location;
-        db = new Database(this.connection);
+        dbConnection = new DBConnection();
+        db = new Database(dbConnection.getConnection());
         this.firstTeam = db.getTeamObj(firstTeamId);
         this.secondTeam = db.getTeamObj(secondTeamId);
+    }
+    private Match(int firstTeamId , int secondTeamId , int numberOfOver , String location , ArrayList<Integer> firstTeamPlayers , ArrayList<Integer> secondTeamPlayers){
+        this.numberOfOver = numberOfOver;
+        this.location = location;
+        dbConnection = new DBConnection();
+        db = new Database(dbConnection.getConnection());
+        this.firstTeam = db.getTeamObj2(firstTeamId , firstTeamPlayers);
+        this.secondTeam = db.getTeamObj2(secondTeamId , secondTeamPlayers);
     }
     public void convertFileDataToTeamObject(){
         firstTeam = teamA.returnTeamObject();
@@ -44,7 +50,7 @@ public class Match {
     public void start(){
         toss = new Toss(firstTeam , secondTeam);
         toss.flipCoin();
-        int toss_id = toss.addTossDetailInDatabase(connection);
+       toss.addTossDetailInDatabase(dbConnection.getConnection());
 
         if(toss.isFirstTeamBattingFirst()){
             firstInning = new PlayGame(firstTeam , secondTeam ,numberOfOver);
@@ -57,9 +63,8 @@ public class Match {
             secondInning = new PlayGame(firstTeam , secondTeam , numberOfOver , firstInning.getCurrentScore());
         }
         secondInning.startInning();
-        db.updateTablesAfterInning(firstInning);
-        db.updateTablesAfterInning(secondInning);
-        db.updateMatchResultTable(firstInning , secondInning , toss_id , location);
+        db.updateTableAfterMatch(firstInning , secondInning , numberOfOver,location);
+        dbConnection.closeConnection();
         showResult();
     }
     public void showResult(){

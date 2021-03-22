@@ -55,23 +55,16 @@ public class Toss {
             }
         }
     }
-    public int addTossDetailInDatabase(Connection connection){
+    public void addTossDetailInDatabase(Connection connection){
         Statement stmt;
         String query;
-        int toss_id = 0;
-        ResultSet res;
         try{
             query = "Insert into toss (first_team_id , second_team_id , winning_team_id , option_choose) Values ("+firstTeam.getTeamId()+" , "+
                     secondTeam.getTeamId()+" , "+tossWinningTeam.getTeamId()+" , " + "\"" + chooseOption +"\""+")";
             stmt = connection.createStatement();
             stmt.executeUpdate(query);
-            query =  "select count(*) from toss";
-            res = stmt.executeQuery(query);
-            res.next();
-            toss_id = res.getInt(1);
         }catch (SQLException sqe){
             sqe.printStackTrace();
         }
-        return toss_id;
     }
 }

@@ -33,4 +33,13 @@ public class Team {
             System.out.println(player.getId() + "   " + player.getPlayerName() + "   " + player.getCategory());
         }
     }
+
+    public Player getPlayerById(int id){
+        for(Player player : players){
+            if(player.getId() == id){
+                return player;
+            }
+        }
+        return null;
+    }
 }

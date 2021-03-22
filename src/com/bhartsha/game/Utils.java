@@ -5,10 +5,10 @@ import lombok.experimental.UtilityClass;
 import java.util.Random;
 @UtilityClass
 public class Utils {
-    private final char[] possibleScore = {'0' , '1' , '2' , '3' , '4' ,'5', '6','W'};
     private final int[] batsmanScoreFrequency={4,8,9,5,7,1,2,2};
     private final int[] allRounderScoreFrequency={3,5,8,4,9,1,4,4};
     private final int[] bowlerScoreFrequency={6,11,7,3,4,0,1,6};
+    private final int[] typeOfBallFrequency={53,3,2,2};
     private final String[] coinFaces = {"head","tail"};
     public int findCeil(int[] prefix , int ele ,  int l , int r){
         int mid;
@@ -32,7 +32,7 @@ public class Utils {
         int ele =  (int)(Math.random()*prefix[n-1]+1);
         return findCeil(prefix , ele , 0 , n-1);
     }
-    public char getRandomScore(String category){
+    public MyEnumContainer.PossibleScore getRandomScore(String category){
         int rnd;
         if(category.equals("Batsman")){
             rnd = randomIndex(batsmanScoreFrequency , batsmanScoreFrequency.length);
@@ -43,10 +43,27 @@ public class Utils {
         else{
             rnd = randomIndex(bowlerScoreFrequency , bowlerScoreFrequency.length);
         }
-        return possibleScore[rnd];
+        return MyEnumContainer.PossibleScore.values()[rnd];
     }
+
     public String getRandomCoinFace(){
         int rnd = new Random().nextInt(coinFaces.length);
         return coinFaces[rnd];
+    }
+
+    public MyEnumContainer.WicketType getRandomWicketType(){
+        int pick = new Random().nextInt(MyEnumContainer.WicketType.values().length);
+        return MyEnumContainer.WicketType.values()[pick];
+    }
+
+    public MyEnumContainer.TypeOfBall getRandomTypeOfBall(){
+        int rnd = randomIndex(typeOfBallFrequency , typeOfBallFrequency.length);
+        return MyEnumContainer.TypeOfBall.values()[rnd];
+    }
+    public MyEnumContainer.PossibleScore getRandomRunningScore(){
+        return MyEnumContainer.PossibleScore.values()[new Random().nextInt(4)];
+    }
+    public int getRandomPlayerIndex(){
+        return (new Random().nextInt(11));
     }
 }
