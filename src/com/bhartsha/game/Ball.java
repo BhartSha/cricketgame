@@ -10,7 +10,6 @@ public class Ball {
     private MyEnumContainer.TypeOfBall typeOfBall;
     private boolean wicketTaken;
     private Wicket wicket;
-
     public Ball(Player playedBy, Player bowledBy, MyEnumContainer.PossibleScore score, MyEnumContainer.TypeOfBall typeOfBall) {
         this.playedBy = playedBy;
         this.bowledBy = bowledBy;
