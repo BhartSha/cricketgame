@@ -55,7 +55,6 @@ public class BowlerRepository {
                             float bowlingAvg= runs/wickets;
                             rs.updateFloat(10,bowlingAvg);
                         }
-
                     }
                     rs.updateRow();
                 }
